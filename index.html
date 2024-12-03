@@ -1,0 +1,117 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *{
+            user-select: none;
+            text-align: center;
+            align-self: center;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background-color: white;
+        }
+        body>div{
+            perspective: 10000px;
+            transform-style: preserve-3d;
+            width: 200px;
+            height: 200px;
+            margin: 200px;
+            transform: scale3d(1.5);
+        }
+        div>div{
+            display: flex;
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            left:50px;
+            top:50px;
+            position: absolute;
+            opacity: 0.8;
+        }
+        #before{
+            transform: translateZ(50px);
+            background-color: rgba(255,0,0,1);
+        }
+        #back{
+            transform: translateZ(-50px) rotateY(180deg);
+            background-color: rgba(0,0,255,1);
+        }
+        #left{
+            transform: translateX(-50px) rotateY(270deg);
+            background-color: rgba(0,255,0,1);
+        }
+        #right{
+            transform: translateX(50px) rotateY(90deg);
+            background-color: rgba(255,255,0,1);
+        }
+        #top{
+            transform: translateY(-50px) rotateX(90deg);
+            background-color: rgba(255,0,255,1);
+        }
+        #bottom{
+            transform: translateY(50px) rotateX(270deg);
+            background-color: rgba(0,255,255,1);
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div id="before">前</div>
+        <div id="back">后</div>
+        <div id="left">左</div>
+        <div id="right">右</div>
+        <div id="top">上</div>
+        <div id="bottom">下</div>
+    </div>
+    
+</body>
+<script>
+    var div = document.querySelector('body>div');
+    var x = 0;
+    var y = 0;
+    keys={};
+    document.addEventListener('keydown',function(e){
+        keys[e.key]=true;
+        sign=2;
+        if(e.shiftKey){
+            sign=10;
+        }
+        else if(keys['ArrowUp']){
+            y-=sign;
+        }
+        if(keys['ArrowDown']){
+            y+=sign;
+        }
+        if(keys['ArrowLeft']){
+            x-=sign;
+        }
+        if(keys['ArrowRight']){
+            x+=sign;
+        }
+        div.style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;
+    });
+
+    document.addEventListener('keyup',function(e){
+        keys[e.key]=false;
+    });
+
+    handleRotate=function(e){
+        x += e.movementX;
+        y -= e.movementY;
+        div.style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;
+    }
+
+    document.addEventListener('mousedown',function(e){
+        document.addEventListener('mousemove', handleRotate);
+    });
+    document.addEventListener('mouseup',function(e){
+        document.removeEventListener('mousemove', handleRotate);
+    });
+    </script>
+</html>
